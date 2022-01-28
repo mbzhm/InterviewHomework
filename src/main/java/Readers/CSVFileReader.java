@@ -10,6 +10,7 @@ public class CSVFileReader implements Readers.FormatReader {
 
     @Override
     public void read(File file, Map files) {
+
         try {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
@@ -27,6 +28,7 @@ public class CSVFileReader implements Readers.FormatReader {
             while (rowScanner.hasNext()) {
                 int id = rowScanner.nextInt();
                 String format = rowScanner.next();
+                System.out.println("csv");
                 files.put(id, format);
             }
         }

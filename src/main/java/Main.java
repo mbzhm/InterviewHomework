@@ -6,15 +6,19 @@ import Readers.XLSXFileReader;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) {
 
         //multithreading initialization
-        //ExecutorService executor = Executors.newSingleThreadExecutor();
+        ExecutorService executor = Executors.newFixedThreadPool(10);
 
 
-        String path = "C:\\Users\\Марал\\Downloads\\InterviewHomework\\src\\main\\resources\\";//path to the file
+        String path = "C:\\Users\\Марал\\Downloads\\BeelineHomework\\src\\main\\resources\\";//path to the file
 
         //files initialization
         File file1 = new File(path + "File1.xlsx");
@@ -27,26 +31,28 @@ public class Main {
         FormatReader reader3 = new GZIPFileReader();
 
         //map that will contain the data from the files
-        Map<Integer, String> files = new HashMap<>();
-
+        Map<Integer, String> files = new ConcurrentHashMap<>();
 
         //tasks for multithreading
-        reader1.read(file1, files);
+        /*reader1.read(file1, files);
         reader2.read(file2, files);
-        reader3.read(file3, files);
+        reader3.read(file3, files);*/
 
+        executor.submit(new ThreadReading(reader1, file1, files));
+        executor.submit(new ThreadReading(reader2, file2, files));
+        executor.submit(new ThreadReading(reader3, file3, files));
 
         //multithreading shutdown
-        //executor.shutdown();
+        executor.shutdown();
 
         //this shutdown method was recommended from the Internet
-        /*try {
+        try {
             if (!executor.awaitTermination(800, TimeUnit.MILLISECONDS)) {
                 executor.shutdownNow();
             }
         }catch(Exception e){
             System.out.println(e.getMessage());
-        }*/
+        }
 
         //initialization of the database application
         DatabaseApp db = new DatabaseApp();
@@ -57,7 +63,7 @@ public class Main {
         }
 
         //exporting the data from the database to the CSV file
-        String result = db.exportToCSV("test1");
+        String result = db.exportToCSV("test2");
         System.out.println(result);
 
     }

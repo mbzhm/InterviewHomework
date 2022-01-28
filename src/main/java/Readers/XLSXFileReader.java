@@ -31,7 +31,7 @@ public class XLSXFileReader implements FormatReader {
 
                     Cell format_cell = cellIterator.next();
                     String format = format_cell.getStringCellValue();
-
+                    System.out.println("xlsx");
                     files.put(id, format);
                 }
             }
