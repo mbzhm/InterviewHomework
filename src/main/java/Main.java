@@ -4,7 +4,9 @@ import Readers.GZIPFileReader;
 import Readers.XLSXFileReader;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -12,7 +14,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         //multithreading initialization
         ExecutorService executor = Executors.newFixedThreadPool(10);
@@ -38,6 +40,17 @@ public class Main {
         reader2.read(file2, files);
         reader3.read(file3, files);*/
 
+//        ThreadReading task1 = new ThreadReading(reader1, file1, files);
+//        ThreadReading task2 = new ThreadReading(reader2, file2, files);
+//        ThreadReading task3 = new ThreadReading(reader3, file3, files);
+
+//        List<ThreadReading> tasks = new ArrayList<>();
+//        tasks.add(task1);
+//        tasks.add(task2);
+//        tasks.add(task3);
+//
+//        executor.invokeAll(tasks);
+
         executor.submit(new ThreadReading(reader1, file1, files));
         executor.submit(new ThreadReading(reader2, file2, files));
         executor.submit(new ThreadReading(reader3, file3, files));
@@ -46,25 +59,20 @@ public class Main {
         executor.shutdown();
 
         //this shutdown method was recommended from the Internet
-        try {
-            if (!executor.awaitTermination(800, TimeUnit.MILLISECONDS)) {
-                executor.shutdownNow();
-            }
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
+            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+                //executor.shutdownNow();
 
-        //initialization of the database application
-        DatabaseApp db = new DatabaseApp();
-
-        //inserting the data from the map to the database
-        for(Map.Entry<Integer, String> entry : files.entrySet()){
-            db.insert(entry.getKey(), entry.getValue());
-        }
-
-        //exporting the data from the database to the CSV file
-        String result = db.exportToCSV("test2");
-        System.out.println(result);
+//        //initialization of the database application
+//        DatabaseApp db = new DatabaseApp();
+//
+//        //inserting the data from the map to the database
+//        for(Map.Entry<Integer, String> entry : files.entrySet()){
+//            db.insert(entry.getKey(), entry.getValue());
+//        }
+//
+//        //exporting the data from the database to the CSV file
+//        String result = db.exportToCSV("test2");
+//        System.out.println(result);
 
     }
 }

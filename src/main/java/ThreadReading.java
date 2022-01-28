@@ -1,7 +1,5 @@
 import Readers.FormatReader;
-
 import java.io.File;
-import java.text.Format;
 import java.util.Map;
 
 public class ThreadReading implements Runnable{

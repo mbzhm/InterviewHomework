@@ -24,7 +24,7 @@ public class GZIPFileReader implements FormatReader {
                 String[] splitted_line = line.split(",");
                 int id = Integer.parseInt(splitted_line[0]);
                 System.out.println("gz");
-                files.put(id, splitted_line[1]);
+                //files.put(id, splitted_line[1]);
             }
 
         }catch(Exception e) {

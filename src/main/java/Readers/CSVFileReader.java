@@ -29,7 +29,7 @@ public class CSVFileReader implements Readers.FormatReader {
                 int id = rowScanner.nextInt();
                 String format = rowScanner.next();
                 System.out.println("csv");
-                files.put(id, format);
+                //files.put(id, format);
             }
         }
         return files;
